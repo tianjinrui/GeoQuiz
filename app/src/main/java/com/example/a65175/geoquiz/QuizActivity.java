@@ -1,5 +1,6 @@
 package com.example.a65175.geoquiz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             new Question(R.string.question_oceans,true)
     };
     private int mCurrentIndex;
+    private boolean mIsCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private  void checkAnswer(boolean userPressedTrue){
         boolean answerTrue=questionBank[mCurrentIndex].isAnswerTrue();
         int messageResId;
-        if(answerTrue==userPressedTrue){
+        //mIsCheater=true;
+        if(mIsCheater){
+            messageResId=R.string.judgment_toast;
+
+        }else if(answerTrue==userPressedTrue){
             messageResId=R.string.true_button;
         }else{
             messageResId=R.string.false_button;
@@ -84,6 +90,18 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mIsCheater=CheatActivity.wasAnswerShown(data);
+        if(requestCode!= Activity.RESULT_OK){
+            return;
+        }else if (requestCode==REQUEST_CODE_CHEAT){
+
+            mIsCheater=CheatActivity.wasAnswerShown(data);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.false_button:
@@ -94,6 +112,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.next_button:
                 mCurrentIndex=(mCurrentIndex+1)%questionBank.length;
+                mIsCheater=false;
                 updateQuestion();
                 break;
             case R.id.prev_button:
@@ -104,7 +123,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 //Intent intent=new Intent(QuizActivity.this,CheatActivity.class);
                 boolean answerTrue=questionBank[mCurrentIndex].isAnswerTrue();
                 Intent intent=CheatActivity.newIntent(QuizActivity.this,answerTrue);
-                startActivity(intent);
+                //startActivity(intent);
                 startActivityForResult(intent ,REQUEST_CODE_CHEAT);
 
         }
