@@ -9,4 +9,9 @@
     <string name="question_africa">The source of the Nile River is in Egypt.000</string>
     <string name="question_americas">The Amazon River is the longest river in the Americas.001</string>
     <string name="question_asia">Lake Baikal is the world\'s oldest and deepest freshwater lake.002</string>
+    <string name="Incorrect_toast"> Incorrect!</string>
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
 </resources>

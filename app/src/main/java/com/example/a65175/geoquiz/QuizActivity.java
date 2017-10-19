@@ -1,5 +1,6 @@
 package com.example.a65175.geoquiz;
 
+import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mQuestionTextView;
     private ImageButton mNextButton;
     private ImageButton mPreviousButton;
+    private  Button mCheatButton;
     private static final String KEY_INDEX="index";
+    private static final int REQUEST_CODE_CHEAT=0;
     private Question [] questionBank=new Question[]{
             new Question(R.string.question_africa,false),
             new Question(R.string.question_americas,true),
@@ -64,6 +67,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         mTrueButton.setOnClickListener(this);
         mNextButton.setOnClickListener(this);
         mPreviousButton.setOnClickListener(this);
+        mCheatButton.setOnClickListener(this);
     }
     public void init(){
         mFalseButton= (Button) findViewById(R.id.false_button);
@@ -71,6 +75,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         mQuestionTextView=(TextView)findViewById(R.id.Question_text_view);
         mNextButton=(ImageButton) findViewById(R.id.next_button);
         mPreviousButton=(ImageButton)findViewById(R.id.prev_button);
+        mCheatButton=(Button)findViewById(R.id.cheat_button);
 
     }
     private void updateQuestion(){
@@ -95,6 +100,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 mCurrentIndex=(questionBank.length+mCurrentIndex-1)%questionBank.length;
                 updateQuestion();
                 break;
+            case R.id.cheat_button:
+                //Intent intent=new Intent(QuizActivity.this,CheatActivity.class);
+                boolean answerTrue=questionBank[mCurrentIndex].isAnswerTrue();
+                Intent intent=CheatActivity.newIntent(QuizActivity.this,answerTrue);
+                startActivity(intent);
+                startActivityForResult(intent ,REQUEST_CODE_CHEAT);
 
         }
 
